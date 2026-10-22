@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import AppButton from '../components/AppButton';
 import { useAppointments } from '../context/AppointmentContext';
+import { dentalServices } from '../data/dentalServices';
 import { colors, radius, spacing, typography } from '../theme/theme';
 
 export default function AppointmentDetailsScreen() {
@@ -12,6 +13,7 @@ export default function AppointmentDetailsScreen() {
   const { id } = useLocalSearchParams();
   const { appointments } = useAppointments();
   const appointment = appointments.find((item) => item.id === id);
+  const service = appointment && dentalServices.find((item) => item.id === appointment.serviceId);
 
   if (!appointment) {
     return (
@@ -34,10 +36,11 @@ export default function AppointmentDetailsScreen() {
         <View style={styles.heroIcon}>
           <Ionicons name="calendar" size={34} color={colors.white} />
         </View>
-        <Text style={styles.title}>{appointment.service}</Text>
+        <Text style={styles.title}>{service?.name || appointment.service}</Text>
         <Text style={styles.status}>Confirmed</Text>
 
         <View style={styles.detailsCard}>
+          {service ? <DetailRow icon="time-outline" label="Estimated duration" value={service.duration} /> : null}
           <DetailRow icon="calendar-outline" label="Date" value={appointment.date} />
           <DetailRow icon="time-outline" label="Time" value={appointment.time} />
           {appointment.notes ? <DetailRow icon="chatbox-ellipses-outline" label="Notes" value={appointment.notes} /> : null}

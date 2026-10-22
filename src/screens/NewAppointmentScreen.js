@@ -6,26 +6,32 @@ import { useRouter } from 'expo-router';
 import AppButton from '../components/AppButton';
 import InputField from '../components/InputField';
 import { useAppointments } from '../context/AppointmentContext';
+import { dentalServices } from '../data/dentalServices';
 import { colors, spacing, typography } from '../theme/theme';
-
-const services = ['Cleaning', 'Check-up', 'Tooth pain'];
 
 export default function NewAppointmentScreen() {
   const router = useRouter();
   const { addAppointment } = useAppointments();
-  const [service, setService] = useState('');
+  const [serviceId, setServiceId] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
   const [notes, setNotes] = useState('');
   const [error, setError] = useState('');
 
   const handleSubmit = () => {
-    if (!service || !date.trim() || !time.trim()) {
+    const selectedService = dentalServices.find((item) => item.id === serviceId);
+    if (!selectedService || !date.trim() || !time.trim()) {
       setError('Choose a service and enter a date and time.');
       return;
     }
 
-    const appointment = addAppointment({ service, date: date.trim(), time: time.trim(), notes: notes.trim() });
+    const appointment = addAppointment({
+      serviceId: selectedService.id,
+      service: selectedService.name,
+      date: date.trim(),
+      time: time.trim(),
+      notes: notes.trim(),
+    });
     router.replace(`/appointment/${appointment.id}`);
   };
 
@@ -41,13 +47,21 @@ export default function NewAppointmentScreen() {
 
         <Text style={styles.label}>Service</Text>
         <View style={styles.serviceRow}>
-          {services.map((option) => (
+          {dentalServices.map((option) => (
             <TouchableOpacity
-              key={option}
-              style={[styles.serviceOption, service === option && styles.serviceSelected]}
-              onPress={() => setService(option)}
+              key={option.id}
+              style={[styles.serviceOption, serviceId === option.id && styles.serviceSelected]}
+              onPress={() => {
+                setServiceId(option.id);
+                setError('');
+              }}
+              accessibilityRole="button"
+              accessibilityState={{ selected: serviceId === option.id }}
             >
-              <Text style={[styles.serviceText, service === option && styles.serviceTextSelected]}>{option}</Text>
+              <Text style={[styles.serviceText, serviceId === option.id && styles.serviceTextSelected]}>
+                {option.name}
+              </Text>
+              <Text style={styles.serviceDuration}>{option.duration}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -93,6 +107,7 @@ const styles = StyleSheet.create({
   serviceSelected: { backgroundColor: colors.primaryLight, borderColor: colors.primary },
   serviceText: { ...typography.caption, color: colors.text },
   serviceTextSelected: { color: colors.primaryDark, fontWeight: '700' },
+  serviceDuration: { ...typography.caption, color: colors.textMuted, fontSize: 11, marginTop: 2 },
   error: { color: colors.danger, fontSize: 13, marginBottom: spacing.sm },
   button: { marginTop: spacing.sm },
 });
