@@ -19,6 +19,7 @@ export default function RootLayout() {
         <Stack.Screen name="appointments" options={{ title: 'Appointments' }} />
         <Stack.Screen name="appointment-new" options={{ title: 'New appointment' }} />
         <Stack.Screen name="appointment/[id]" options={{ title: 'Appointment details' }} />
+        <Stack.Screen name="service/[id]" options={{ title: 'Dental service details' }} />
       </Stack>
     </AppointmentProvider>
   );
