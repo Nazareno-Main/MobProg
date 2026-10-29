@@ -16,6 +16,7 @@ export default function RootLayout() {
         <Stack.Screen name="register" options={{ title: 'Create account' }} />
         <Stack.Screen name="forgot-password" options={{ title: 'Reset password' }} />
         <Stack.Screen name="home" options={{ title: 'Home' }} />
+        <Stack.Screen name="products" options={{ title: 'Products API' }} />
         <Stack.Screen name="appointments" options={{ title: 'Appointments' }} />
         <Stack.Screen name="appointment-new" options={{ title: 'New appointment' }} />
         <Stack.Screen name="appointment/[id]" options={{ title: 'Appointment details' }} />
