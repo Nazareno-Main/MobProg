@@ -46,6 +46,12 @@ export default function HomeScreen() {
           onPress={() => router.push('/appointments')}
           style={styles.button}
         />
+        <AppButton
+          title="Explore products API"
+          variant="outline"
+          onPress={() => router.push('/products')}
+          style={styles.button}
+        />
 
         <View style={styles.servicesHeader}>
           <Text style={styles.sectionTitle}>Explore dental services</Text>
